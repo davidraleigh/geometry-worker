@@ -35,7 +35,7 @@ namespace geometry_server_cs {
 		}
 
 		protected override void OnMessage(MessageEventArgs e) {
-			GeomOpParts geomOpParts = JsonConvert.DeserializeObject<GeomOpParts>(e.Data);
+			GeometryOperator geomOpParts = JsonConvert.DeserializeObject<GeometryOperator>(e.Data);
 			String result = geomOpParts.ExecuteOperator();
 			this.Context.WebSocket.Send(String.Format("{0}: {1}", m_name, result));
 		}

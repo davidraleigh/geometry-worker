@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using com.esri.core.geometry;
 
 namespace geometry_server_cs {
-	public class GeomOpParts {
+	public class GeometryOperator {
 		private Operator.Type m_operatorType;
 		private List<Geometry> m_leftGeometries = new List<Geometry>();
 		private List<Geometry> m_rightGeometries = new List<Geometry>();
@@ -46,8 +46,8 @@ namespace geometry_server_cs {
 			}
 		}
 
-		public GeomOpParts[] left_geometry_operations { get; set; }
-		public GeomOpParts[] right_geometry_operations { get; set; }
+		public GeometryOperator[] left_geometry_operations { get; set; }
+		public GeometryOperator[] right_geometry_operations { get; set; }
 		private SpatialReference m_spatialReference = null;
 		public String wkt_sr {
 			set {
