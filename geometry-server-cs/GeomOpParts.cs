@@ -10,12 +10,11 @@ namespace geometry_server_cs {
 	public class GeomOpParts {
 		private Operator.Type m_operatorType;
 		private List<Geometry> m_leftGeometries = new List<Geometry>();
+		private List<Geometry> m_rightGeometries = new List<Geometry>();
 
-		private String[] m_leftGeometryStrings;
-		private String m_operatorName;
-		public String OperatorName { 
+		public String operator_name { 
 			get {
-				return m_operatorName;
+				return null;
 			}
 			set {
 				Operator.Type operatorType = (Operator.Type)Enum.Parse(typeof(Operator.Type), value);
@@ -25,7 +24,7 @@ namespace geometry_server_cs {
 					throw new JsonException(String.Format("{0} is not an operator defined in the Operator.Type enum"));
 			}
 		}
-		public String[] LeftWKTGeometries { 
+		public String[] left_wkt_geometries { 
 			get {
 				return null;
 			}
@@ -35,9 +34,20 @@ namespace geometry_server_cs {
 				}
 			}
 		}
-		public GeomOpParts[] LeftGeometryOperations { get; set; }
-		public String[] RightGeometries { get; set; }
-		public GeomOpParts[] RightGeometryOperations { get; set; }
+
+		public String[] right_wkt_geometries {
+			get {
+				return null;
+			}
+			set {
+				foreach (String wkt in value) {
+					m_rightGeometries.Add(GeometryEngine.GeometryFromWkt(wkt, 0, Geometry.Type.Unknown));
+				}
+			}
+		}
+
+		public GeomOpParts[] left_geometry_operations { get; set; }
+		public GeomOpParts[] right_geometry_operations { get; set; }
 		private SpatialReference m_spatialReference = null;
 		public String wkt_sr {
 			set {
@@ -50,16 +60,16 @@ namespace geometry_server_cs {
 				m_spatialReference = SpatialReference.Create(value);
 			}
 		}
-		public double[] DoubleVariables { get; set; }
-		public bool[] BoolVariables { get; set; }
+		public double[] double_variables { get; set; }
+		public bool[] bool_variables { get; set; }
 
 		public String ExecuteOperator() {
-			List<String> result = null;
+			List<String> result = new List<string>();
 			switch (m_operatorType) {
 				case Operator.Type.Boundary:
 					break;
 				case Operator.Type.Buffer:
-					result = GeometryEngine.Buffer(m_leftGeometries.ToArray(), m_spatialReference, DoubleVariables, BoolVariables == null ? false : BoolVariables[0]).Select(p => GeometryEngine.GeometryToWkt(p, 0)).ToList();
+					result = GeometryEngine.Buffer(m_leftGeometries.ToArray(), m_spatialReference, double_variables, bool_variables == null ? false : bool_variables[0]).Select(p => GeometryEngine.GeometryToWkt(p, 0)).ToList();
 					break;
 				case Operator.Type.Clip:
 					break;
@@ -142,6 +152,7 @@ namespace geometry_server_cs {
 				case Operator.Type.Touches:
 					break;
 				case Operator.Type.Union:
+					result.Add(GeometryEngine.GeometryToWkt(GeometryEngine.Union(m_leftGeometries.ToArray(), m_spatialReference), 0));
 					break;
 				case Operator.Type.Within:
 					break;
