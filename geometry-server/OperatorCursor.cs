@@ -217,6 +217,7 @@ namespace geometry_server {
                     spatialRelationship = OperatorWithin.Local().Execute(m_leftGeometrCurosr.Next(), m_rightGeometryCursor.Next(), m_spatialReference, null);
                     break;
                 default:
+                    throw new JsonException(String.Format("{0} Unknown operation", Enum.GetName(typeof(Operator.Type), m_operatorType)));
                     break;
             }
             return geometryCursor;

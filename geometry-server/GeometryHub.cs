@@ -10,6 +10,26 @@ using com.esri.core.geometry;
 namespace geometry_server {
     public class GeometryHub : Hub {
 
+        public void GetValidOperators() {
+            Clients.Caller.broadcastMessage(JsonConvert.SerializeObject(GeometryEngineInfo.GeometryEngineMethods()));
+        }
+
+        public void GetInValidOperators() {
+            Clients.Caller.broadcastMessage(JsonConvert.SerializeObject(GeometryEngineInfo.NotImplemented()));
+        }
+
+        public void GetOperatorDetails(String operatorTypeName) {
+            Clients.Caller.broadcastMessage(JsonConvert.SerializeObject(GeometryEngineInfo.OperatorInfo(operatorTypeName)));
+        }
+
+        public void GetAllOperatorDetails() {
+            JArray obj = new JArray();
+            List<String> validOperators = GeometryEngineInfo.GeometryEngineMethods();
+            foreach (String enumTypeName in validOperators) {
+                obj.Add(GeometryEngineInfo.OperatorInfo(enumTypeName));
+            }
+            Clients.Caller.broadcastMessage(JsonConvert.SerializeObject(obj));
+        }
 
         public void Request(string requestId, string requestContent) {
             // Call the broadcastMessage method to update clients.
