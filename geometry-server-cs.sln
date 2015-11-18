@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "geometry-server-cs", "geometry-server\geometry-server-cs.csproj", "{63A930B6-F41C-4DCE-A328-960A6FF1B085}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "geometry-server-cs-tests", "geometry-server-cs-tests\geometry-server-cs-tests.csproj", "{D701E162-1075-4029-96EE-15BEC920264F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{63A930B6-F41C-4DCE-A328-960A6FF1B085}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63A930B6-F41C-4DCE-A328-960A6FF1B085}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63A930B6-F41C-4DCE-A328-960A6FF1B085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D701E162-1075-4029-96EE-15BEC920264F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D701E162-1075-4029-96EE-15BEC920264F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D701E162-1075-4029-96EE-15BEC920264F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D701E162-1075-4029-96EE-15BEC920264F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
