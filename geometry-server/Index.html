@@ -31,7 +31,7 @@
             // Declare a proxy to reference the hub.
             var chat = $.connection.geometryHub;
             // Create a function that the hub can call to broadcast messages.
-            chat.client.roadcastMessage = function (requestId, requestContent) {
+            chat.client.broadcastMessage = function (requestId, requestContent) {
                 // Html encode display requestId and requestContent.
                 var encodedName = $('<div />').text(requestId).html();
                 var encodedMsg = $('<div />').text(requestContent).html();
