@@ -57,8 +57,8 @@ class RPC {
     public static void Main() {
         var rpcClient = new RPCClient();
 
-        Console.WriteLine(" [x] Requesting fib(30)");
-        var response = rpcClient.Call("30");
+        Console.WriteLine(" [x] Requesting fib(5)");
+        var response = rpcClient.Call("5");
         Console.WriteLine(" [.] Got '{0}'", response);
 
         rpcClient.Close();
