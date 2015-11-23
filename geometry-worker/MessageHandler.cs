@@ -2,6 +2,12 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using geometry_server;
+using com.esri.core.geometry;
+using System.Collections.Generic;
+
 
 class RPCServer {
     public static void Main() {
@@ -10,49 +16,97 @@ class RPCServer {
         //@"host=geometry-mq.cloudapp.net;username=geometry-cs;password=testpassword";
         factory.UserName = "geometry-cs";
         factory.Password = "testpassword";
-        using (var connection = factory.CreateConnection())
-        using (var channel = connection.CreateModel()) {
-            channel.QueueDeclare(queue: "rpc_queue",
-                                 durable: false,
-                                 exclusive: false,
-                                 autoDelete: false,
-                                 arguments: null);
-            channel.BasicQos(0, 1, false);
-            var consumer = new QueueingBasicConsumer(channel);
-            channel.BasicConsume(queue: "rpc_queue",
-                                 noAck: false,
-                                 consumer: consumer);
-            Console.WriteLine(" [x] Awaiting RPC requests");
 
-            while (true) {
-                string response = null;
-                var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+		using (var connection = factory.CreateConnection()) {
+        	using (var channel = connection.CreateModel()) {
+				// remote procedure call queue
+	            channel.QueueDeclare(queue: "rpc_queue",
+	                                 durable: false,
+	                                 exclusive: false,
+	                                 autoDelete: false,
+	                                 arguments: null);
+				// fetch only one item off the queue at a time
+	            channel.BasicQos(0, 1, false);
 
-                var body = ea.Body;
-                var props = ea.BasicProperties;
-                var replyProps = channel.CreateBasicProperties();
-                replyProps.CorrelationId = props.CorrelationId;
+	            var consumer = new QueueingBasicConsumer(channel);
+	            channel.BasicConsume(queue: "rpc_queue",
+	                                 noAck: false,
+	                                 consumer: consumer);
+	            Console.WriteLine(" [x] Awaiting RPC requests");
 
-                try {
-                    var message = Encoding.UTF8.GetString(body);
-                    int n = int.Parse(message);
-                    Console.WriteLine(" [.] fib({0})", message);
-                    response = fib(n).ToString();
-                } catch (Exception e) {
-                    Console.WriteLine(" [.] " + e.Message);
-                    response = "";
-                } finally {
-                    var responseBytes = Encoding.UTF8.GetBytes(response);
-                    channel.BasicPublish(exchange: "",
-                                         routingKey: props.ReplyTo,
-                                         basicProperties: replyProps,
-                                         body: responseBytes);
-                    channel.BasicAck(deliveryTag: ea.DeliveryTag,
-                                     multiple: false);
-                }
+				while (true) {
+					var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+
+					var body = ea.Body;
+					var props = ea.BasicProperties;
+					var replyProps = channel.CreateBasicProperties();
+					replyProps.CorrelationId = props.CorrelationId;
+
+					try {
+						var message = Encoding.UTF8.GetString(body);
+						processGeometry(message, channel, replyProps, props);
+					} catch (Exception e) {
+						Console.WriteLine(" [.] " + e.Message);
+					} finally {
+						channel.BasicAck(deliveryTag: ea.DeliveryTag,
+							multiple: false);
+					}
+				}
             }
         }
     }
+
+	private static void processGeometry(String request, IModel channel, IBasicProperties replyProps, IBasicProperties props) {
+		//TODO replace with id from rabbitMQ task?
+		Newtonsoft.Json.Linq.JObject jobject = new Newtonsoft.Json.Linq.JObject(new JProperty("RequestId", "test"));
+		byte[] responseBytes = null;
+		try {
+			OperatorCursor geomOpParts = JsonConvert.DeserializeObject<OperatorCursor>(request);
+			double distance = Double.NegativeInfinity;
+			bool spatialRelationship = false;
+			List<Proximity2DResult> proximityResults = null;
+
+			GeometryCursor geomCursor = geomOpParts.GenerateCursor(ref distance, ref spatialRelationship, ref proximityResults);
+			if (geomCursor != null) {
+				Geometry geom = null;
+				while ((geom = geomCursor.Next()) != null) {
+					jobject = new JObject(
+						new JProperty("RequestId", "test"),
+						new JProperty("Results", GeometryEngine.GeometryToWkt(geom, 0))
+					);
+
+					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
+					channel.BasicPublish(exchange: "",
+						routingKey: props.ReplyTo,
+						basicProperties: replyProps,
+						body: responseBytes);
+				}
+				return;
+			} else if (proximityResults != null) {
+				foreach (Proximity2DResult prox in proximityResults) {
+					jobject = new JObject( new JProperty("RequestId", "test"),
+						new JProperty("Results", JsonConvert.SerializeObject(prox)));
+					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
+					channel.BasicPublish(exchange: "",
+						routingKey: props.ReplyTo,
+						basicProperties: replyProps,
+						body: responseBytes);
+				}
+				return;
+			} else if (!Double.IsNegativeInfinity(distance)) {
+				jobject.Add("Results", distance);
+			} else {
+				jobject.Add("Results", spatialRelationship);
+			}
+		} catch (Exception e) {
+			jobject.Add("Error", e.Message);
+		}
+		responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
+		channel.BasicPublish(exchange: "",
+			routingKey: props.ReplyTo,
+			basicProperties: replyProps,
+			body: responseBytes);
+	}
 
     /// <summary>
     /// Assumes only valid positive integer input.

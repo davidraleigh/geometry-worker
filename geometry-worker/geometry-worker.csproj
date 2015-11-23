@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -33,18 +33,25 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="packages.config" />
+    <None Include="Dockerfile" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Request.cs" />
+    <Compile Include="GeometryEngineInfo.cs" />
+    <Compile Include="OperatorCursor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="RabbitMQ.Client, Version=3.5.6.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\RabbitMQ.Client.3.5.6\lib\net40\RabbitMQ.Client.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
+    <Reference Include="RabbitMQ.Client">
+      <HintPath>..\lib\RabbitMQ.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="geometry-api-cs">
+      <HintPath>..\lib\geometry-api-cs.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
