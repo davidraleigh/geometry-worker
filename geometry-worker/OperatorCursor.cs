@@ -101,7 +101,7 @@ namespace geometry_server {
                 case Operator.Type.Boundary:
                     geometryCursor = OperatorBoundary.Local().Execute(m_leftGeometrCurosr, null);
                     break;
-                case Operator.Type.Buffer: // {operator_name:"Buffer", left_wkt_geometries:["POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2, 3 2, 3 3, 2 3,2 2))"], wkid_sr:4326, input_booleans:[false], input_doubles:[2.0]}
+			case Operator.Type.Buffer: // "{operator_name:\"Buffer\", left_wkt_geometries:[\"POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2, 3 2, 3 3, 2 3,2 2))\"], wkid_sr:4326, input_booleans:[false], input_doubles:[2.0]}"
                     geometryCursor = OperatorBuffer.Local().Execute(m_leftGeometrCurosr, m_spatialReference, input_doubles, input_booleans[0], null);
                     break;
                 case Operator.Type.Clip:
