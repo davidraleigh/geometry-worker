@@ -17,7 +17,7 @@ namespace geometry_server {
 		private List<Envelope> m_envelopes = new List<Envelope>();
 		private OperatorOffset.JoinType m_operatorOffsetJoin;
 
-		public String DEM9 { get; set; }
+		public String de_9im { get; set; }
 
 		public String offset_join {
 			set {
@@ -197,7 +197,7 @@ namespace geometry_server {
 					proximityResults.Add(OperatorProximity2D.Local().GetNearestVertex(m_leftGeometrCurosr.Next(), (Point)m_rightGeometryCursor.Next()));
 				break;
 			case Operator.Type.Relate:
-				spatialRelationship = OperatorRelate.Local().Execute(m_leftGeometrCurosr.Next(), m_rightGeometryCursor.Next(), m_spatialReference, DEM9, null);
+				spatialRelationship = OperatorRelate.Local().Execute(m_leftGeometrCurosr.Next(), m_rightGeometryCursor.Next(), m_spatialReference, de_9im, null);
 				break;
 			case Operator.Type.ShapePreservingDensify:
 				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
