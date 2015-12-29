@@ -74,7 +74,7 @@ class RPCServer {
 						new JProperty("geometry_results", GeometryEngine.GeometryToWkt(geom, 0))
 					);
 
-					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
+					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject, Formatting.Indented));
 					channel.BasicPublish(exchange: "",
 						routingKey: props.ReplyTo,
 						basicProperties: replyProps,
@@ -84,7 +84,7 @@ class RPCServer {
 			} else if (proximityResults.Count > 0) {
 				foreach (Proximity2DResult prox in proximityResults) {
 					jobject = new JObject( new JProperty("proximity_results", JsonConvert.SerializeObject(prox)));
-					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
+					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject, Formatting.Indented));
 					channel.BasicPublish(exchange: "",
 						routingKey: props.ReplyTo,
 						basicProperties: replyProps,
@@ -99,7 +99,7 @@ class RPCServer {
 		} catch (Exception e) {
 			jobject.Add("Error", e.Message);
 		}
-		responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
+		responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject, Formatting.Indented));
 		channel.BasicPublish(exchange: "",
 			routingKey: props.ReplyTo,
 			basicProperties: replyProps,
