@@ -214,10 +214,11 @@ namespace geometry_server {
 				spatialRelationship = OperatorTouches.Local().Execute(m_leftGeometrCurosr.Next(), m_rightGeometryCursor.Next(), m_spatialReference, null);
 				break;
 			case Operator.Type.Union:
-				if (m_rightGeometries.Count > 0)
-					geometryCursor = OperatorUnion.Local ().Execute (m_leftGeometrCurosr.Next (), m_rightGeometryCursor.Next (), m_spatialReference, null);
-				else 
-					geometryCursor = OperatorUnion.Local().Execute(m_leftGeometrCurosr, m_spatialReference, null);
+				if (m_rightGeometries.Count > 0) {
+					m_leftGeometries.Add(m_rightGeometries[0]);
+					m_leftGeometrCurosr = new SimpleGeometryCursor(m_leftGeometries);
+				}
+				geometryCursor = OperatorUnion.Local().Execute(m_leftGeometrCurosr, m_spatialReference, null);
 				break;
 			case Operator.Type.Within:
 				spatialRelationship = OperatorWithin.Local().Execute(m_leftGeometrCurosr.Next(), m_rightGeometryCursor.Next(), m_spatialReference, null);
