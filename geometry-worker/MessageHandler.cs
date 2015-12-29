@@ -58,7 +58,7 @@ class RPCServer {
 
 	private static void processGeometry(String request, IModel channel, IBasicProperties replyProps, IBasicProperties props) {
 		//TODO replace with id from rabbitMQ task?
-		Newtonsoft.Json.Linq.JObject jobject = new Newtonsoft.Json.Linq.JObject(new JProperty("RequestId", "test"));
+		Newtonsoft.Json.Linq.JObject jobject = new Newtonsoft.Json.Linq.JObject();//new JProperty("RequestId", "test"));
 		byte[] responseBytes = null;
 		try {
 			OperatorCursor geomOpParts = JsonConvert.DeserializeObject<OperatorCursor>(request);
@@ -82,7 +82,7 @@ class RPCServer {
 						body: responseBytes);
 				}
 				return;
-			} else if (proximityResults != null) {
+			} else if (proximityResults.Count > 0) {
 				foreach (Proximity2DResult prox in proximityResults) {
 					jobject = new JObject( new JProperty("RequestId", "test"),
 						new JProperty("Results", JsonConvert.SerializeObject(prox)));
@@ -107,17 +107,4 @@ class RPCServer {
 			basicProperties: replyProps,
 			body: responseBytes);
 	}
-
-    /// <summary>
-    /// Assumes only valid positive integer input.
-    /// Don't expect this one to work for big numbers,
-    /// and it's probably the slowest recursive implementation possible.
-    /// </summary>
-    private static int fib(int n) {
-        if (n == 0 || n == 1) {
-            return n;
-        }
-
-        return fib(n - 1) + fib(n - 2);
-    }
 }

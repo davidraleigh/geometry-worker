@@ -36,15 +36,15 @@ class RPCClient {
 
 		//TODO test geometry demo
 	
-		String testGeomString = "{operator_name:\"Buffer\", left_wkt_geometries:[\"POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2, 3 2, 3 3, 2 3,2 2))\"], wkid_sr:4326, input_booleans:[false], input_doubles:[2.0]}";
+		String testGeomString = "{operator_name:\"Buffer\", left_wkt_geometries:[\"POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2, 3 2, 3 3, 2 3,2 2))\", \"POLYGON((1 1,5 1,5 5,1 5,1 1),(2 2, 3 2, 3 3, 2 3,2 2))\"], wkid_sr:4326, input_booleans:[false], input_doubles:[2.0]}";
 		var messageBytes = Encoding.UTF8.GetBytes(testGeomString);
         channel.BasicPublish(exchange: "",
                              routingKey: "rpc_queue",
                              basicProperties: props,
                              body: messageBytes);
 
-        while (true) {
-            var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+		while (true) {
+			var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
             if (ea.BasicProperties.CorrelationId == corrId) {
                 return Encoding.UTF8.GetString(ea.Body);
             }
