@@ -71,8 +71,7 @@ class RPCServer {
 				Geometry geom = null;
 				while ((geom = geomCursor.Next()) != null) {
 					jobject = new JObject(
-						new JProperty("RequestId", "test"),
-						new JProperty("Results", GeometryEngine.GeometryToWkt(geom, 0))
+						new JProperty("geometry_results", GeometryEngine.GeometryToWkt(geom, 0))
 					);
 
 					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
@@ -84,8 +83,7 @@ class RPCServer {
 				return;
 			} else if (proximityResults.Count > 0) {
 				foreach (Proximity2DResult prox in proximityResults) {
-					jobject = new JObject( new JProperty("RequestId", "test"),
-						new JProperty("Results", JsonConvert.SerializeObject(prox)));
+					jobject = new JObject( new JProperty("proximity_results", JsonConvert.SerializeObject(prox)));
 					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject));
 					channel.BasicPublish(exchange: "",
 						routingKey: props.ReplyTo,
@@ -94,9 +92,9 @@ class RPCServer {
 				}
 				return;
 			} else if (!Double.IsNegativeInfinity(distance)) {
-				jobject.Add("Results", distance);
+				jobject.Add("distance_results", distance);
 			} else {
-				jobject.Add("Results", spatialRelationship);
+				jobject.Add("spatial_results", spatialRelationship);
 			}
 		} catch (Exception e) {
 			jobject.Add("Error", e.Message);
