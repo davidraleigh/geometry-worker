@@ -173,7 +173,7 @@ namespace geometry_server {
 			case Operator.Type.ImportMapGeometryFromJson:
 				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
 			case Operator.Type.Intersection:
-				geometryCursor = OperatorIntersection.Local().Execute(m_leftGeometrCurosr, m_rightGeometryCursor, m_spatialReference, null, input_integers[0]);
+				geometryCursor = OperatorIntersection.Local().Execute(m_leftGeometrCurosr, m_rightGeometryCursor, m_spatialReference, null, input_integers == null ? -1 : input_integers[0]);
 				break;
 			case Operator.Type.Intersects:
 				spatialRelationship = OperatorIntersects.Local().Execute(m_leftGeometrCurosr.Next(), m_rightGeometryCursor.Next(), m_spatialReference, null);
