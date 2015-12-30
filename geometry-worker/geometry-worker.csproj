@@ -46,11 +46,11 @@
     <Reference Include="RabbitMQ.Client">
       <HintPath>..\lib\RabbitMQ.Client.dll</HintPath>
     </Reference>
-    <Reference Include="geometry-api-cs">
-      <HintPath>..\lib\geometry-api-cs.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="geometry-api-cs">
+      <HintPath>..\lib\geometry-api-cs.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
