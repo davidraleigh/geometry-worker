@@ -17,8 +17,9 @@ class RPCServer {
         factory.UserName = "geometry-cs";
         factory.Password = "testpassword";
 
+		int crashCount = 0;
 		// If the connection or channel crashes this loop will open them up again
-		while (true) {
+		while (crashCount++ < 1000) {
 			try {
 				using (var connection = factory.CreateConnection()) {
 					using (var channel = connection.CreateModel()) {
@@ -59,7 +60,7 @@ class RPCServer {
 					}
 				}
 			} catch (Exception e) {
-				Console.WriteLine("Caught exception {0}", e.Message);
+				Console.WriteLine("Caught exception {0}. This is the {1} crash of the system", e.Message, crashCount);
 			}
         }
     }
