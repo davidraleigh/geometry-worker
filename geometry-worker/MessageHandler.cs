@@ -17,42 +17,50 @@ class RPCServer {
         factory.UserName = "geometry-cs";
         factory.Password = "testpassword";
 
-		using (var connection = factory.CreateConnection()) {
-        	using (var channel = connection.CreateModel()) {
-				// remote procedure call queue
-	            channel.QueueDeclare(queue: "rpc_queue",
-	                                 durable: false,
-	                                 exclusive: false,
-	                                 autoDelete: false,
-	                                 arguments: null);
-				// fetch only one item off the queue at a time
-	            channel.BasicQos(0, 1, false);
+		// If the connection or channel crashes this loop will open them up again
+		while (true) {
+			try {
+				using (var connection = factory.CreateConnection()) {
+					using (var channel = connection.CreateModel()) {
+						// remote procedure call queue
+						channel.QueueDeclare(queue: "rpc_queue",
+							durable: false,
+							exclusive: false,
+							autoDelete: false,
+							arguments: null);
+						// fetch only one item off the queue at a time
+						channel.BasicQos(0, 1, false);
 
-	            var consumer = new QueueingBasicConsumer(channel);
-	            channel.BasicConsume(queue: "rpc_queue",
-	                                 noAck: false,
-	                                 consumer: consumer);
-	            Console.WriteLine(" [x] Awaiting RPC requests");
+						var consumer = new QueueingBasicConsumer(channel);
+						channel.BasicConsume(queue: "rpc_queue",
+							noAck: false,
+							consumer: consumer);
+						Console.WriteLine(" [x] Awaiting RPC requests");
 
-				while (true) {
-					var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
+						// worker queue listening loop 
+						while (true) {
+							var ea = (BasicDeliverEventArgs)consumer.Queue.Dequeue();
 
-					var body = ea.Body;
-					var props = ea.BasicProperties;
-					var replyProps = channel.CreateBasicProperties();
-					replyProps.CorrelationId = props.CorrelationId;
+							var body = ea.Body;
+							var props = ea.BasicProperties;
+							var replyProps = channel.CreateBasicProperties();
+							replyProps.CorrelationId = props.CorrelationId;
 
-					try {
-						var message = Encoding.UTF8.GetString(body);
-						processGeometry(message, channel, replyProps, props);
-					} catch (Exception e) {
-						Console.WriteLine(" [.] " + e.Message);
-					} finally {
-						channel.BasicAck(deliveryTag: ea.DeliveryTag,
-							multiple: false);
+							try {
+								var message = Encoding.UTF8.GetString(body);
+								processGeometry(message, channel, replyProps, props);
+							} catch (Exception e) {
+								Console.WriteLine(" [.] " + e.Message);
+							} finally {
+								channel.BasicAck(deliveryTag: ea.DeliveryTag,
+									multiple: false);
+							}
+						}
 					}
 				}
-            }
+			} catch (Exception e) {
+				Console.WriteLine("Caught exception {0}", e.Message);
+			}
         }
     }
 
