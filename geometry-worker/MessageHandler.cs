@@ -78,17 +78,20 @@ class RPCServer {
 			GeometryCursor geomCursor = geomOpParts.GenerateCursor(ref distance, ref spatialRelationship, ref proximityResults);
 			if (geomCursor != null) {
 				Geometry geom = null;
+				JArray geomArray = new JArray();
 				while ((geom = geomCursor.Next()) != null) {
-					jobject = new JObject(
-						new JProperty("geometry_results", GeometryEngine.GeometryToWkt(geom, 0))
-					);
-
-					responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject, Formatting.Indented));
-					channel.BasicPublish(exchange: "",
-						routingKey: props.ReplyTo,
-						basicProperties: replyProps,
-						body: responseBytes);
+					
+					geomArray.Add(new JObject(new JProperty("geometry", GeometryEngine.GeometryToWkt(geom, 0))));
 				}
+				jobject = new JObject(
+					new JProperty("geometry_results", geomArray)
+				);
+
+				responseBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(jobject, Formatting.Indented));
+				channel.BasicPublish(exchange: "",
+					routingKey: props.ReplyTo,
+					basicProperties: replyProps,
+					body: responseBytes);
 				return;
 			} else if (proximityResults.Count > 0) {
 				foreach (Proximity2DResult prox in proximityResults) {
