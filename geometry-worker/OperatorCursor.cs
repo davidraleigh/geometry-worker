@@ -13,7 +13,7 @@ namespace geometry_server {
 		private GeometryCursor m_rightGeometryCursor = null;
 		private List<Geometry> m_leftGeometries = new List<Geometry>();
 		private List<Geometry> m_rightGeometries = new List<Geometry>();
-		private Envelope2D m_envelope2D;
+		private Envelope2D m_envelope2D = new Envelope2D()
 		private List<Envelope> m_envelopes = new List<Envelope>();
 		private OperatorOffset.JoinType m_operatorOffsetJoin;
 
@@ -57,9 +57,7 @@ namespace geometry_server {
 
 		public String envelope {
 			set {
-				m_envelope2D = new Envelope2D();
 				GeometryEngine.GeometryFromWkt(value, 0, Geometry.Type.Unknown).QueryEnvelope2D(m_envelope2D);
-				//m_envelopes.Add((Envelope)GeometryEngine.GeometryFromWkt(value, 0, Geometry.Type.Envelope));
 			}
 		}
 		public OperatorCursor left_geometry_operations { get; set; }
