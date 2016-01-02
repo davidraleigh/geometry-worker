@@ -13,7 +13,7 @@ namespace geometry_server {
 		private GeometryCursor m_rightGeometryCursor = null;
 		private List<Geometry> m_leftGeometries = new List<Geometry>();
 		private List<Geometry> m_rightGeometries = new List<Geometry>();
-		private Envelope2D m_envelope2D = new Envelope2D()
+		private Envelope2D m_envelope2D = new Envelope2D();
 		private List<Envelope> m_envelopes = new List<Envelope>();
 		private OperatorOffset.JoinType m_operatorOffsetJoin;
 
