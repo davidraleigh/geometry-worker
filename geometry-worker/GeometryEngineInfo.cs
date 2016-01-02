@@ -38,7 +38,7 @@ namespace geometry_server {
             Operator.Type operatorType = (Operator.Type)Enum.Parse(typeof(Operator.Type), operatorTypeEnum);
             System.Reflection.MethodInfo[] methodInfo = null;
             if (Enum.IsDefined(typeof(Operator.Type), operatorType) | operatorType.ToString().Contains(",")) {
-                methodInfo = typeof(OperatorBuffer).GetMethods();
+				methodInfo = typeof(OperatorProximity2D).GetMethods();
             } else {
                 throw new Exception(String.Format("{0} is not an operator defined in the Operator.Type enum", operatorTypeEnum));
             }
@@ -46,7 +46,10 @@ namespace geometry_server {
             Newtonsoft.Json.Linq.JObject operatorInfoObj = new Newtonsoft.Json.Linq.JObject();
             Newtonsoft.Json.Linq.JArray executeArray = new Newtonsoft.Json.Linq.JArray();
             foreach (System.Reflection.MethodInfo mi in methodInfo) {
-                if (mi.Name != "Execute")
+				if (mi.Name != "Execute" && 
+					mi.Name != "GetNearestCoordinate" && 
+					mi.Name != "GetNearestVertex" &&
+					mi.Name != "GetNearestVertices")
                     continue;
 
                 Newtonsoft.Json.Linq.JObject executeMethod = new JObject();

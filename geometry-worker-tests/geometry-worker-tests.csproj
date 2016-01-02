@@ -32,6 +32,12 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="geometry-api-cs">
+      <HintPath>..\lib\geometry-api-cs.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Test.cs" />
@@ -39,5 +45,11 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\geometry-worker\geometry-worker.csproj">
+      <Project>{C1544EED-099B-435D-8F7B-593F0706BBCE}</Project>
+      <Name>geometry-worker</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>

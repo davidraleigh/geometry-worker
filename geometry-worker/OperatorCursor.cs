@@ -55,10 +55,11 @@ namespace geometry_server {
 			}
 		}
 
-		public String wkt_envelope {
+		public String envelope {
 			set {
-				((Envelope)GeometryEngine.GeometryFromWkt(value, 0, Geometry.Type.Envelope)).QueryEnvelope2D(m_envelope2D);
-				m_envelopes.Add((Envelope)GeometryEngine.GeometryFromWkt(value, 0, Geometry.Type.Envelope));
+				m_envelope2D = new Envelope2D();
+				GeometryEngine.GeometryFromWkt(value, 0, Geometry.Type.Unknown).QueryEnvelope2D(m_envelope2D);
+				//m_envelopes.Add((Envelope)GeometryEngine.GeometryFromWkt(value, 0, Geometry.Type.Envelope));
 			}
 		}
 		public OperatorCursor left_geometry_operations { get; set; }

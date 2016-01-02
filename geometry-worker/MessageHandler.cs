@@ -80,7 +80,6 @@ class RPCServer {
 				Geometry geom = null;
 				JArray geomArray = new JArray();
 				while ((geom = geomCursor.Next()) != null) {
-					
 					geomArray.Add(GeometryEngine.GeometryToWkt(geom, 0));
 				}
 				jobject = new JObject(
