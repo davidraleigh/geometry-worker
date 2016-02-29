@@ -152,11 +152,19 @@ namespace geometry_server {
 				geometryCursor = OperatorGeneralize.Local().Execute(m_leftGeometrCurosr, input_doubles[0], input_booleans == null ? false : input_booleans[0], null);
 				break;
 			case Operator.Type.GeodesicBuffer:
-				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
+				double[] distances = new double[input_doubles.Length - 1];
+				Array.Copy (input_doubles, distances, input_doubles.Length - 1);
+				bool bReserved = input_booleans [0];
+				bool bUnion = input_booleans.Length == 2 ? input_booleans [1] : false;
+				geometryCursor = OperatorGeodesicBuffer.Local ().Execute (m_leftGeometrCurosr, m_spatialReference, input_integers[0], distances, input_doubles[input_doubles.Length - 1], bReserved, bUnion, null);
+				break;
+				//throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
 			case Operator.Type.GeodeticArea:
 				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
 			case Operator.Type.GeodeticDensifyByLength:
-				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
+				geometryCursor = OperatorGeodeticDensifyByLength.Local().Execute(m_leftGeometrCurosr, m_spatialReference, input_doubles[0], input_integers[0], null);
+				break;
+//				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
 			case Operator.Type.GeodeticLength:
 				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
 			case Operator.Type.ImportFromESRIShape:
@@ -224,7 +232,6 @@ namespace geometry_server {
 				break;
 			default:
 				throw new JsonException(String.Format("{0} Unknown operation", Enum.GetName(typeof(Operator.Type), m_operatorType)));
-				break;
 			}
 			return geometryCursor;
 		}

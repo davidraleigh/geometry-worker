@@ -30,8 +30,30 @@ namespace geometryworkertests
 //			Assert.AreEqual(methodDetails.First.First.Value<String>(), "Buffer");
 //		}
 
+		public List<String> UnionTest(String[] leftWKTs, int wkid) {
+			String[] leftWKT = null;
+			List<Geometry> m_leftGeometries = new List<Geometry>();
+			foreach (String wkt in leftWKT) {
+				m_leftGeometries.Add(GeometryEngine.GeometryFromWkt(wkt, 0, Geometry.Type.Unknown));
+			}
+			GeometryCursor geometryCursor = new SimpleGeometryCursor(m_leftGeometries);
+			SpatialReference spatialReference = new SpatialReference(wkid);
+			GeometryCursor unionGeometryCursor = OperatorUnion.Local().Execute(geometryCursor, m_spatialReference, null);
+
+			Geometry geom = null;
+			List<String> wktArray = new List<String>();
+
+			while ((geom = unionGeometryCursor.Next()) != null) {
+				wktArray.Add(GeometryEngine.GeometryToWkt(geom, 0));
+			}
+
+			return wktArray;
+		}
+
 		[Test ()]
 		public void MethodDetailsTest2() {
+
+
 			JObject methodDetails = GeometryEngineInfo.OperatorInfo("Proximity2D");
 			String words = methodDetails.ToString();
 			Assert.IsNotNull(methodDetails);

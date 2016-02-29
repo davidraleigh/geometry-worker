@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "geometry-worker", "geometry
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "geometry-worker-tests", "geometry-worker-tests\geometry-worker-tests.csproj", "{10D7FB69-121E-4B52-BBD3-3AAB4DF704F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "geometry-api-cs", "..\geometry-api-cs\geometry-api-cs.csproj", "{021BC608-4EA1-49FE-90A0-D080B44E863D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,22 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|ARM.Build.0 = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|x64.Build.0 = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Debug|x86.Build.0 = Debug|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|ARM.Build.0 = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|x64.ActiveCfg = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|x64.Build.0 = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|x86.ActiveCfg = Release|Any CPU
+		{021BC608-4EA1-49FE-90A0-D080B44E863D}.Release|x86.Build.0 = Release|Any CPU
 		{10D7FB69-121E-4B52-BBD3-3AAB4DF704F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{10D7FB69-121E-4B52-BBD3-3AAB4DF704F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10D7FB69-121E-4B52-BBD3-3AAB4DF704F4}.Debug|ARM.ActiveCfg = Debug|Any CPU
