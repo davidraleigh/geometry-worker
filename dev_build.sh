@@ -1,3 +1,4 @@
+# to run this script you have to have opened a docker quickstart terminal
 echo Build geometry
 cd ../geometry-api-cs
 rm -R obj
@@ -15,11 +16,13 @@ xbuild /p:Configuration=Release ./geometry-worker/geometry-worker.csproj
 
 cd geometry-worker
 azure login
+docker images
+docker ps -a
+docker-machine ls
+docker build -t davidraleigh/geometry-worker .
 docker-machine start geometry-worker
 docker-machine env geometry-worker
 eval "$(docker-machine env geometry-worker)"
-docker-machine stop geometry-worker
-docker build -t davidraleigh/geometry-worker .
-# if I only knew how to rename old machines...
-#docker run -d --name geometry-worker davidraleigh/geometry-worker
-docker run -d davidraleigh/geometry-worker
+docker stop geometry-worker-container
+docker rm geometry-worker-container
+docker run -d --name geometry-worker-container davidraleigh/geometry-worker
