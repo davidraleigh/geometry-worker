@@ -19,10 +19,32 @@ azure login
 docker images
 docker ps -a
 docker-machine ls
-docker build -t davidraleigh/geometry-worker .
+docker stop geometry-worker-container
+docker images
+docker ps -a
+docker-machine ls
+docker rm geometry-worker-container
+docker images
+docker ps -a
+docker-machine ls
+docker-machine stop geometry-worker
+docker images
+docker ps -a
+docker-machine ls
 docker-machine start geometry-worker
+docker images
+docker ps -a
+docker-machine ls
 docker-machine env geometry-worker
 eval "$(docker-machine env geometry-worker)"
-docker stop geometry-worker-container
-docker rm geometry-worker-container
+docker images
+docker ps -a
+docker-machine ls
+docker build -t davidraleigh/geometry-worker .
+docker images
+docker ps -a
+docker-machine ls
 docker run -d --name geometry-worker-container davidraleigh/geometry-worker
+docker images
+docker ps -a
+docker-machine ls
