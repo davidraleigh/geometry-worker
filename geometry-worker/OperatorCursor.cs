@@ -77,6 +77,7 @@ namespace geometry_server {
 		public double[] input_doubles { get; set; }
 		public bool[] input_booleans { get; set; }
 		public int[] input_integers { get; set; }
+		public string[] input_strings { get; set; }
 
 		public GeometryCursor GenerateCursor(ref double distance, ref bool spatialRelationship, ref List<Proximity2DResult> proximityResults) {
 			if (m_leftGeometrCurosr == null && left_geometry_operations != null) {
@@ -150,6 +151,11 @@ namespace geometry_server {
 				throw new JsonException(String.Format("{0} Not a supported operation at this time", Enum.GetName(typeof(Operator.Type), m_operatorType)));
 			case Operator.Type.Generalize:
 				geometryCursor = OperatorGeneralize.Local().Execute(m_leftGeometrCurosr, input_doubles[0], input_booleans == null ? false : input_booleans[0], null);
+				break;
+			case Operator.Type.GeneralizeArea:
+				GeneralizeAreaType generalizeType;
+				Enum.TryParse (input_strings == null ? "Neither" : input_strings [0], out generalizeType);
+				geometryCursor = OperatorGeneralizeArea.Local ().Execute(m_leftGeometrCurosr, input_doubles [0], input_booleans == null ? false : input_booleans [0], generalizeType, null);
 				break;
 			case Operator.Type.GeodesicBuffer:
 				double[] distances = new double[input_doubles.Length - 1];
