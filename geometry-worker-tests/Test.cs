@@ -37,8 +37,8 @@ namespace geometryworkertests
 				m_leftGeometries.Add(GeometryEngine.GeometryFromWkt(wkt, 0, Geometry.Type.Unknown));
 			}
 			GeometryCursor geometryCursor = new SimpleGeometryCursor(m_leftGeometries);
-			SpatialReference spatialReference = new SpatialReference(wkid);
-			GeometryCursor unionGeometryCursor = OperatorUnion.Local().Execute(geometryCursor, m_spatialReference, null);
+			SpatialReference spatialReference = SpatialReference.Create(wkid);
+			GeometryCursor unionGeometryCursor = OperatorUnion.Local().Execute(geometryCursor, spatialReference, null);
 
 			Geometry geom = null;
 			List<String> wktArray = new List<String>();
