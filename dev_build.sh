@@ -16,6 +16,8 @@ xbuild /p:Configuration=Release ./geometry-worker/geometry-worker.csproj
 
 cd geometry-worker
 azure login
+docker-machine env geometry-worker
+eval "$(docker-machine env geometry-worker)"
 docker images
 docker ps -a
 docker-machine ls
