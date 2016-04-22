@@ -152,10 +152,10 @@ namespace geometry_server {
 			case Operator.Type.Generalize:
 				geometryCursor = OperatorGeneralize.Local().Execute(m_leftGeometrCurosr, input_doubles[0], input_booleans == null ? false : input_booleans[0], null);
 				break;
-			case Operator.Type.GeneralizeArea:
-				GeneralizeAreaType generalizeType;
+			case Operator.Type.GeneralizeByArea:
+				GeneralizeType generalizeType;
 				Enum.TryParse (input_strings == null ? "Neither" : input_strings [0], out generalizeType);
-				geometryCursor = OperatorGeneralizeArea.Local ().Execute(m_leftGeometrCurosr, input_doubles [0], input_booleans == null ? false : input_booleans [0], generalizeType, null);
+				geometryCursor = OperatorGeneralizeByArea.Local().Execute(m_leftGeometrCurosr, input_doubles [0], input_booleans == null ? false : input_booleans [0], generalizeType, null);
 				break;
 			case Operator.Type.GeodesicBuffer:
 				double[] distances = new double[input_doubles.Length - 1];
