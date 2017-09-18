@@ -232,5 +232,7 @@ _Pvt_Extensions
 .fake/
 
 .DS_Store
-#mycert.cer
-#lib/geometry-api-cs.dll
+mycert.cer
+lib/geometry-api-cs.dll
+
+..bfg-report/
